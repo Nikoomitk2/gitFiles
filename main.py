@@ -24,7 +24,12 @@ from videoDownloader import videoDownloader
 """
 Notitzen:
 - tiktok sound mute
+verändert:
 - user_data_dir                     checken ob klappt..
+- cookie path
+- time userdatadir/letzte saved cookies
+
+- gitFiles repository url geändert
 
 - Cookie login headless checken
 - paths checken
@@ -45,6 +50,7 @@ class main():
         
         self.workspacePath = workspacePath
         self.mConfig = ConfigLoader(self.workspacePath)
+        print(self.workspacePath)
 
         logging.basicConfig(
             filename = self.workspacePath + 'logDatei.log',
@@ -87,13 +93,15 @@ class main():
 
                             if condition == True:
 
+                                print(videoPath)
                                 videoPath2 = videoPath.replace('/','\\') + self.accounts[i][2] + "\\" + files[0]
+                                print(videoPath2)
                                 condition = instaBot.upload(videoPath2)
                                 print("upload finished for " + self.accounts[i][0])
 
                                 try:
                                     os.remove(videoPath2)
-                                    self.mConfig.setTimer_accounts(i, dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+                                    self.mConfig.setTimer_accounts(i)
                                 except:
                                     print('no file in video Path Folder for ' + self.accounts[i][0])
                                     logging.error('no file in video Path Folder for ' + self.accounts[i][0])
@@ -107,8 +115,8 @@ class main():
                                 instaBot.browser.quit()
                                 time.sleep(random.randint(10,30))
                         except Exception as e:
-                            print("instaBot Failure for " + self.accounts[i][0] + ": " + e)
-                            logging.error('instaBot Failure for ' + self.accounts[i][0] + ": " + e)
+                            print("instaBot Failure for " + self.accounts[i][0] + ": " + str(e))
+                            logging.error('instaBot Failure for ' + self.accounts[i][0] + ": " + str(e))
                             instaBot.browser.quit()
                             return False
                 else:
@@ -122,9 +130,9 @@ class main():
         condition = self.mConfig.getData_settings('status')
         if self.mConfig.getData_settings('stopAutostart') == 1:
             condition = False
-
+            
         while condition != False:
-            time.sleep(10) # spaeter hoeher
+            time.sleep(3600) # spaeter hoeher
 
             if self.mConfig.getData_settings('stopBot') == 0:
                 if self.mConfig.getData_settings('runWhenAfk') == 1:
@@ -148,14 +156,15 @@ class main():
             print("main condition: " + str(condition))
 
 
-workspacePath = os.path.dirname(os.path.abspath(__file__)) + "\\"
+# workspacePath = os.path.dirname(os.path.abspath(__file__)) + "\\"
 
 # Für exe ablauf:
-# path = os.path.dirname(os.path.abspath(__file__))
-# print("Path vor Split: " + path)
-# workspacePathSplitted = path.split('\\')
-# workspacePath = ""
-# for i in range(len(workspacePathSplitted)-2):
-#     workspacePath = workspacePath + workspacePathSplitted[i] + "/"
-# print("Path nach Split: " + workspacePath)
-main(workspacePath).startBot()
+path = os.path.dirname(os.path.abspath(__file__))
+print("Path vor Split: " + path)
+workspacePathSplitted = path.split('\\')
+workspacePath = ""
+for i in range(len(workspacePathSplitted)-2):
+    workspacePath = workspacePath + workspacePathSplitted[i] + "/"
+print("Path nach Split: " + workspacePath)
+main1 = main(workspacePath)
+main1.startBot()

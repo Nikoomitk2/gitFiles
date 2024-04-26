@@ -3,6 +3,7 @@ import random
 import datetime
 import re
 import os.path
+from tkinter import N
 
 class ConfigLoader():
 
@@ -14,9 +15,10 @@ class ConfigLoader():
         self.path_settings_settings =               self.workspacePath + "settings/settings.json"
         self.path_settings_accounts =               self.workspacePath + "settings/accounts.json"
         self.path_settings_instaSettings =          self.workspacePath + "settings/instaSettings.json"
+        self.path_settings_userDataTime =           self.workspacePath + "settings/userDataTime.json"
 
     #
-    # accounts.json:
+    # accounts.json:        account[username, password, targetHashtag, hashtags, lastUploadTime, isAccActive, lastSavedCookieTime]
     #
 
     def getData_accounts(self, source):
@@ -61,38 +63,56 @@ class ConfigLoader():
     def deleteAccount_accounts(self, username):
         with open(self.path_settings_accounts) as file:
             data = json.load(file)
-
         liste = []
         for i in range(len(data['accounts'])):
             if username != data['accounts'][i][0]:
                 liste.append(data['accounts'][i])
-
         data['accounts'] = liste
-            
         with open(self.path_settings_accounts, "w+") as newfile:
             json.dump(data, newfile, indent=4)
         file.close()
         newfile.close()
 
-    def setTimer_accounts(self, index, time):
+    def setTimer_accounts(self, index):
         with open(self.path_settings_accounts) as file:
             data = json.load(file)
-        data['accounts'][index][4] = time
+        data['accounts'][index][4] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         with open(self.path_settings_accounts, "w+") as newfile:
             json.dump(data, newfile, indent=4)
         file.close()
         newfile.close()
 
-    def setStatus_accounts(self, username, value):
+    def setDataWithName_accounts(self, username, indexOfAttribute, value=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")):
         with open(self.path_settings_accounts) as file:
             data = json.load(file)
         for i in range(len(data['accounts'])):
             if data['accounts'][i][0] == username:
-                data['accounts'][i][5] = value
+                data['accounts'][i][indexOfAttribute] = value
+                break
         with open(self.path_settings_accounts, "w+") as newfile:
             json.dump(data, newfile, indent=4)
         file.close()
         newfile.close()
+        
+    def getUserDataTime(self, username):
+        with open(self.path_settings_accounts) as file:
+            data = json.load(file)
+        file.close()
+        for i in range(len(data['accounts'])):
+            if data['accounts'][i][0] == username:
+                return data['accounts'][i][6]
+              
+    def checkUserDataTime(self, username):
+        updateCookie = False
+        oldTime = self.getUserDataTime(username)
+        if oldTime == "new":
+            updateCookie = True
+        else:
+            timeDifference = self.checkTime(oldTime)
+            if timeDifference > random.randint(120, 192): # 5-8 Tage
+                updateCookie = True
+        return updateCookie
+
 
     #
     # settings.json:
@@ -195,7 +215,7 @@ class ConfigLoader():
         with open(self.path_settings_accounts, 'w') as accountsFile:
             json.dump({'accounts': [["tione1946", "Peter123!", "fights",
             "#boxing #boxingtraining #gym #fights #streetfight #streetfights #hardwork #dedication #fit #motivation",
-            "2024-04-04 01:01:32", False]]}, accountsFile)
+            "2024-04-04 01:01:32", False, "new"]]}, accountsFile)
         accountsFile.close()
 
         with open(self.path_settings_instaSettings, 'w') as instaSettingsFile:

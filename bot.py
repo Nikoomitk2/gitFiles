@@ -2,6 +2,7 @@ import pickle
 import time
 import random
 import logging
+import os
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -48,32 +49,39 @@ class bot():
             return False
 
 
-
     def login(self):
-        self.browser.uc_open("https://www.instagram.com/accounts/login")
+        self.browser.uc_open("https://www.instagram.com/")
         time.sleep(1)
-
-        try:
-            cookies = self.WaitForObject(By.CSS_SELECTOR, "button._a9--._a9_0")
-            ActionChains(self.browser).move_to_element(cookies).perform()
-            cookies.click()
-            time.sleep(random.randint(3,4))
-        except:
-            print("no cookies required")
-
-        try:
-            self.loadCookies()
-            self.browser.refresh()
-            time.sleep(random.randint(2,3))
-        except:
-            print('no cookies saved yet for ' + self.username)
-            logging.error('no cookies saved yet for ' + self.username)
-
+        
         try:
             self.WaitForObject(By.XPATH, "//span[contains(text(),'Erstellen')]")
+            print("already logged in..")
         except:
-            print('Cookies login failure for ' + self.username)
-            logging.error('Cookies login failure for ' + self.username)
+            self.browser.uc_open("https://www.instagram.com/accounts/login")
+            time.sleep(1)
+
+            # load Cookie Verfahre nicht notwendig, da userDataDir Cookies enthaelt:
+            """try:
+                cookies = self.WaitForObject(By.CSS_SELECTOR, "button._a9--._a9_0")
+                ActionChains(self.browser).move_to_element(cookies).perform()
+                cookies.click()
+                time.sleep(random.randint(3,4))
+            except:
+                print("no cookies required")
+
+            try:
+                self.loadCookies()
+                self.browser.refresh()
+                time.sleep(random.randint(2,3))
+            except:
+                print('no cookies saved yet for ' + self.username)
+                logging.error('no cookies saved yet for ' + self.username)
+
+            try:
+                self.WaitForObject(By.XPATH, "//span[contains(text(),'Erstellen')]")
+            except:
+                print('Cookies login failure for ' + self.username)
+                logging.error('Cookies login failure for ' + self.username)"""
 
             # cookies:
             try:
@@ -123,7 +131,7 @@ class bot():
                 self.WaitForObject(By.CSS_SELECTOR, "button._abn9._abng._abnh._abnn")
                 print('Acc suspicious login for ' + self.username)
                 logging.error('Acc suspicious login for ' + self.username)
-                self.mConfig.setStatus_accounts(self.username, False)
+                self.mConfig.setDataWithName_accounts(self.username, 5, False)
                 return self.username
             except:
                 pass
@@ -155,7 +163,7 @@ class bot():
         except:
             print('Login not possible for ' + self.username)
             logging.error('Login not possible for ' + self.username + ', (maybe wrong password)')
-            self.mConfig.setStatus_accounts(self.username, False)
+            self.mConfig.setDataWithName_accounts(self.username, 5, False)
             return self.username
         
         self.saveCookies()
@@ -241,7 +249,7 @@ class bot():
         try:
             self.WaitForObject(By.CSS_SELECTOR, "div.wbloks_1.wbloks_77")
             logging.error('suspicious activity for ' + self.username)
-            self.mConfig.setStatus_accounts(self.username, False)
+            self.mConfig.setDataWithName_accounts(self.username, 5, False)
             return False
         except:
             pass
@@ -267,10 +275,10 @@ class bot():
             logging.error('Logout failure')
     
     def saveCookies(self):
-        import os
-        if not os.path.exists(self.cookiePathUser):         # noetig? evtl. erst nach 1-2 wochen wieder speichern
+        if self.mConfig.checkUserDataTime(self.username) or not os.path.exists(self.cookiePathUser):         
             cookies = self.browser.get_cookies()
             pickle.dump(cookies, open(self.cookiePathUser, "wb"))
+            self.mConfig.setDataWithName_accounts(self.username, 6)
 
     def loadCookies(self):
         cookies = pickle.load(open(self.cookiePathUser, "rb"))

@@ -45,7 +45,7 @@ class videoDownloader():
                 self.browser.add_cookie(cookie)
             except Exception as e:
                 pass
-            
+    
     def muteBrowserAudio(self):
         video = self.WaitForObject(By.CSS_SELECTOR, "video._abg5")  # find video css object
         self.browser.execute_script("arguments[0].muted = true;", video)
@@ -104,7 +104,7 @@ class videoDownloader():
 
     def filterTiktokVideos(self, tag="fights"):
         self.browser.uc_open("https://www.tiktok.com/explore")
-
+        
         # login with cookies:
         try:
             self.loadCookies()
@@ -162,12 +162,13 @@ class videoDownloader():
                     if captionOld == captionNew:
                         break
                 videoCaption.append(captionNew)
-                print(captionNew)
 
             self.browser.quit()
         except:
             logging.error('tiktok video filter Failure')
             return False
+
+        print(str(len(videoLinks)) + " zum Download verfügbar")
 
         # Download Videos:
         for index, video in enumerate(videoLinks):
