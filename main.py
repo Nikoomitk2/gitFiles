@@ -156,7 +156,7 @@ class main():
             print("main condition: " + str(condition))
 
 
-# workspacePath = os.path.dirname(os.path.abspath(__file__)) + "\\"
+#workspacePath = os.path.dirname(os.path.abspath(__file__)) + "\\"
 
 # Für exe ablauf:
 path = os.path.dirname(os.path.abspath(__file__))
@@ -166,5 +166,4 @@ workspacePath = ""
 for i in range(len(workspacePathSplitted)-2):
     workspacePath = workspacePath + workspacePathSplitted[i] + "/"
 print("Path nach Split: " + workspacePath)
-main1 = main(workspacePath)
-main1.startBot()
+main(workspacePath).startBot()
