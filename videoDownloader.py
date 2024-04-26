@@ -17,14 +17,14 @@ from chromeOptions import chromeOptions
 
 class videoDownloader():
 
-    def __init__(self, workspacePath, isHeadless=False):
+    def __init__(self, workspacePath):
         self.workspacePath = workspacePath
         self.cookiePath = self.workspacePath + "settings/userData/default/cookieTiktok.pkl"
         self.videoPath = self.workspacePath + "videos/"
         self.mConfig = ConfigLoader(self.workspacePath)
 
         driver = chromeOptions()
-        self.browser = driver.chromeOptions(workspacePath=self.workspacePath, isHeadless=isHeadless)
+        self.browser = driver.chromeOptions(workspacePath=self.workspacePath)
         
         logging.basicConfig(
             filename = self.workspacePath + 'logDatei.log',
@@ -109,7 +109,7 @@ class videoDownloader():
         try:
             self.loadCookies()
         except:
-            print('tiktok Cookie login Failure')
+#            print('tiktok Cookie login Failure')
             logging.error('tiktok Cookie login Failure')
             return False
         
@@ -168,7 +168,7 @@ class videoDownloader():
             logging.error('tiktok video filter Failure')
             return False
 
-        print(str(len(videoLinks)) + " zum Download verfügbar")
+#        print(str(len(videoLinks)) + " zum Download verfügbar")
 
         # Download Videos:
         for index, video in enumerate(videoLinks):

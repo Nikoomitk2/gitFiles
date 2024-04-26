@@ -4,10 +4,10 @@ from seleniumbase import Driver
 class chromeOptions():
 
     # Selenium Base:
-    def chromeOptions(ts, workspacePath, accountName="default", isHeadless=False):     # zum Testen isHeadless auf False setzen
+    def chromeOptions(ts, workspacePath, accountName="default", isHeadless=True):     # zum Testen isHeadless auf False setzen
         browser = None
         userDataDir = workspacePath + "settings/userData/" + accountName
-        print(userDataDir)
+#        print(userDataDir)
 
         # User Agent:
         ua = UserAgent(browsers='chrome', os='windows')

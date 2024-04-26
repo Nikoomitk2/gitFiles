@@ -93,17 +93,17 @@ class main():
 
                             if condition == True:
 
-                                print(videoPath)
+#                               print(videoPath)
                                 videoPath2 = videoPath.replace('/','\\') + self.accounts[i][2] + "\\" + files[0]
                                 print(videoPath2)
                                 condition = instaBot.upload(videoPath2)
-                                print("upload finished for " + self.accounts[i][0])
+#                               print("upload finished for " + self.accounts[i][0])
 
                                 try:
                                     os.remove(videoPath2)
                                     self.mConfig.setTimer_accounts(i)
                                 except:
-                                    print('no file in video Path Folder for ' + self.accounts[i][0])
+#                                    print('no file in video Path Folder for ' + self.accounts[i][0])
                                     logging.error('no file in video Path Folder for ' + self.accounts[i][0])
 
                                 if condition == True:
@@ -115,12 +115,14 @@ class main():
                                 instaBot.browser.quit()
                                 time.sleep(random.randint(10,30))
                         except Exception as e:
-                            print("instaBot Failure for " + self.accounts[i][0] + ": " + str(e))
+#                            print("instaBot Failure for " + self.accounts[i][0] + ": " + str(e))
                             logging.error('instaBot Failure for ' + self.accounts[i][0] + ": " + str(e))
                             instaBot.browser.quit()
                             return False
                 else:
-                    print("upload timeout not done yet for " + self.accounts[i][0])
+                    logging.error('upload timeout not done yet for ' + self.accounts[i][0])
+#                    print("upload timeout not done yet for " + self.accounts[i][0])
+
         
         if condition != False:
             condition = True
@@ -141,7 +143,7 @@ class main():
                     time.sleep(1200) # 20 min
                     newPos = pyautogui.position()
                     if oldPos == newPos:
-                        print("afk")
+#                       print("afk")
                         self.mConfig.setDataNormal_settings('isBotActive', True)
                         condition = self.runBot()
                         self.mConfig.setDataNormal_settings('isBotActive', False)
@@ -153,17 +155,17 @@ class main():
             if condition == False:
                 self.mConfig.setDataNormal_settings('status', condition)
             condition = condition and self.mConfig.getData_settings('isGuiActive')
-            print("main condition: " + str(condition))
+#           print("main condition: " + str(condition))
 
 
-#workspacePath = os.path.dirname(os.path.abspath(__file__)) + "\\"
+# workspacePath = os.path.dirname(os.path.abspath(__file__)) + "\\"
 
 # Für exe ablauf:
 path = os.path.dirname(os.path.abspath(__file__))
-print("Path vor Split: " + path)
+#print("Path vor Split: " + path)
 workspacePathSplitted = path.split('\\')
 workspacePath = ""
 for i in range(len(workspacePathSplitted)-2):
     workspacePath = workspacePath + workspacePathSplitted[i] + "/"
-print("Path nach Split: " + workspacePath)
+#print("Path nach Split: " + workspacePath)
 main(workspacePath).startBot()
