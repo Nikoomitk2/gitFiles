@@ -134,7 +134,7 @@ class main():
             condition = False
             
         while condition != False:
-            time.sleep(10) # spaeter hoeher
+            time.sleep(3600) # spaeter hoeher
 
             if self.mConfig.getData_settings('stopBot') == 0:
                 if self.mConfig.getData_settings('runWhenAfk') == 1:
