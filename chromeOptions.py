@@ -7,7 +7,7 @@ class chromeOptions():
     def chromeOptions(ts, workspacePath, accountName="default", isHeadless=True):     # zum Testen isHeadless auf False setzen
         browser = None
         userDataDir = workspacePath + "settings/userData/" + accountName
-#        print(userDataDir)
+        print("aktuelles UserData Verzeichnis: " + userDataDir)
 
         # User Agent:
         ua = UserAgent(browsers='chrome', os='windows')

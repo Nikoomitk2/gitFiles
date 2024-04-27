@@ -109,7 +109,7 @@ class videoDownloader():
         try:
             self.loadCookies()
         except:
-#            print('tiktok Cookie login Failure')
+            #print('tiktok Cookie login Failure')
             logging.error('tiktok Cookie login Failure')
             return False
         
@@ -168,12 +168,12 @@ class videoDownloader():
             logging.error('tiktok video filter Failure')
             return False
 
-#        print(str(len(videoLinks)) + " zum Download verfügbar")
+        #print(str(len(videoLinks)) + " zum Download verfügbar")
 
         # Download Videos:
         for index, video in enumerate(videoLinks):
             filename = videoCredit[index] + "__" + str(random.randint(111,999)) + "__" + str(videoCaption[index]) + ".mp4"
-            print(filename)
+            #print(filename)
             self.downloadVideo(videoLinks[index], tag, filename)
             time.sleep(10)
 

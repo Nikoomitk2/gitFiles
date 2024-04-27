@@ -50,7 +50,7 @@ class main():
         
         self.workspacePath = workspacePath
         self.mConfig = ConfigLoader(self.workspacePath)
-        print(self.workspacePath)
+        #print(self.workspacePath)
 
         logging.basicConfig(
             filename = self.workspacePath + 'logDatei.log',
@@ -93,17 +93,17 @@ class main():
 
                             if condition == True:
 
-#                               print(videoPath)
+                                #print(videoPath)
                                 videoPath2 = videoPath.replace('/','\\') + self.accounts[i][2] + "\\" + files[0]
                                 print(videoPath2)
                                 condition = instaBot.upload(videoPath2)
-#                               print("upload finished for " + self.accounts[i][0])
+                                #print("upload finished for " + self.accounts[i][0])
 
                                 try:
                                     os.remove(videoPath2)
                                     self.mConfig.setTimer_accounts(i)
                                 except:
-#                                    print('no file in video Path Folder for ' + self.accounts[i][0])
+                                    #print('no file in video Path Folder for ' + self.accounts[i][0])
                                     logging.error('no file in video Path Folder for ' + self.accounts[i][0])
 
                                 if condition == True:
@@ -115,19 +115,19 @@ class main():
                                 instaBot.browser.quit()
                                 time.sleep(random.randint(10,30))
                         except Exception as e:
-#                            print("instaBot Failure for " + self.accounts[i][0] + ": " + str(e))
+                            #print("instaBot Failure for " + self.accounts[i][0] + ": " + str(e))
                             logging.error('instaBot Failure for ' + self.accounts[i][0] + ": " + str(e))
                             instaBot.browser.quit()
                             return False
                 else:
                     logging.error('upload timeout not done yet for ' + self.accounts[i][0])
-#                    print("upload timeout not done yet for " + self.accounts[i][0])
-
+                    #print("upload timeout not done yet for " + self.accounts[i][0])
         
         if condition != False:
             condition = True
         return condition
     
+
     def startBot(self):
         condition = self.mConfig.getData_settings('status')
         if self.mConfig.getData_settings('stopAutostart') == 1:
@@ -143,19 +143,19 @@ class main():
                     time.sleep(1200) # 20 min
                     newPos = pyautogui.position()
                     if oldPos == newPos:
-#                       print("afk")
-                        self.mConfig.setDataNormal_settings('isBotActive', True)
+                        #print("afk")
+                        self.mConfig.setDataNormal_settings('isBotActive', True)    # notwendig?
                         condition = self.runBot()
-                        self.mConfig.setDataNormal_settings('isBotActive', False)
+                        self.mConfig.setDataNormal_settings('isBotActive', False)   # ..
                 else:
-                    self.mConfig.setDataNormal_settings('isBotActive', True)
+                    self.mConfig.setDataNormal_settings('isBotActive', True)        # ..
                     condition = self.runBot()
-                    self.mConfig.setDataNormal_settings('isBotActive', False)
+                    self.mConfig.setDataNormal_settings('isBotActive', False)       # ..
 
             if condition == False:
                 self.mConfig.setDataNormal_settings('status', condition)
             condition = condition and self.mConfig.getData_settings('isGuiActive')
-#           print("main condition: " + str(condition))
+            #print("main condition: " + str(condition))
 
 
 # workspacePath = os.path.dirname(os.path.abspath(__file__)) + "\\"

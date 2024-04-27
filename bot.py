@@ -55,7 +55,7 @@ class bot():
         
         try:
             self.WaitForObject(By.XPATH, "//span[contains(text(),'Erstellen')]")
-#            print("already logged in..")
+            #print("already logged in..")
         except:
             self.browser.uc_open("https://www.instagram.com/accounts/login")
             time.sleep(1)
@@ -90,7 +90,7 @@ class bot():
                 cookies.click()
                 time.sleep(random.randint(1,3))
             except:
-#                print('no cookies interaction required')
+                #print('no cookies interaction required')
                 pass
 
             try:
@@ -109,7 +109,7 @@ class bot():
                 self.WaitForObject(By.CSS_SELECTOR, "button._acan._acap._acas._aj1-").click() 
                 time.sleep(random.randint(8,15))
             except:
-#                print('Login failure for ' + self.username)
+                #print('Login failure for ' + self.username)
                 logging.error('Login failure for ' + self.username)
                 return False
             
@@ -130,7 +130,7 @@ class bot():
             # check suspicious login popup:
             try:
                 self.WaitForObject(By.CSS_SELECTOR, "button._abn9._abng._abnh._abnn")
-#                print('Acc suspicious login for ' + self.username)
+                #print('Acc suspicious login for ' + self.username)
                 logging.error('Acc suspicious login for ' + self.username)
                 self.mConfig.setDataWithName_accounts(self.username, 5, False)
                 return self.username
@@ -162,7 +162,7 @@ class bot():
         try:
             self.WaitForObject(By.XPATH, "//span[contains(text(),'Erstellen')]")
         except:
-#            print('Login not possible for ' + self.username)
+            #print('Login not possible for ' + self.username)
             logging.error('Login not possible for ' + self.username + ', (maybe wrong password)')
             self.mConfig.setDataWithName_accounts(self.username, 5, False)
             return self.username
@@ -242,7 +242,7 @@ class bot():
         try:
             self.WaitForObject(By.XPATH, "//div[contains(text(),'Teilen')]").click()
             time.sleep(random.randint(45,70)) # hoeher stellen?
-#            print('Upload Content Button pressed for ' + self.username)
+            #print('Upload Content Button pressed for ' + self.username)
         except:
             logging.error('Upload Content Button failure for ' + self.username)
             return False
@@ -272,6 +272,8 @@ class bot():
 
             self.WaitForObject(By.XPATH, "//span[contains(text(),'Abmelden')]").click()
             time.sleep(random.randint(5, 8))
+
+            logging.error('upload process worked for ' + self.username)
         except:
             logging.error('Logout failure')
     
